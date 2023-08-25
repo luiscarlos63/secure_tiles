@@ -7,3 +7,4 @@ vivado_project/*
 vivado_*
 vivado.jou
 vivado.log
+hs_err*
