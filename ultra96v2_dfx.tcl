@@ -947,17 +947,19 @@ BS {0 {ID 0 ADDR 0 SIZE 0 CLEAR 0}} RESET_REQUIRED low}} HAS_POR_RM 1 POR_RM\
 RP_3}}\
      CP_FAMILY {ultrascale_plus}\
      DIRTY {0}\
+     CP_ARBITRATION_PROTOCOL {1}\
    } \
-   CONFIG.GUI_RM_NEW_NAME {RP_3} \
+   CONFIG.GUI_CP_ARBITRATION_PROTOCOL {1} \
+   CONFIG.GUI_RM_NEW_NAME {RP_1} \
    CONFIG.GUI_RM_RESET_REQUIRED {low} \
    CONFIG.GUI_SELECT_RM {0} \
    CONFIG.GUI_SELECT_TRIGGER_0 {0} \
    CONFIG.GUI_SELECT_TRIGGER_1 {0} \
    CONFIG.GUI_SELECT_TRIGGER_2 {0} \
    CONFIG.GUI_SELECT_TRIGGER_3 {0} \
-   CONFIG.GUI_SELECT_VS {2} \
+   CONFIG.GUI_SELECT_VS {0} \
    CONFIG.GUI_VS_HAS_POR_RM {true} \
-   CONFIG.GUI_VS_NEW_NAME {VS_3} \
+   CONFIG.GUI_VS_NEW_NAME {VS_1} \
    CONFIG.GUI_VS_POR_RM {0} \
  ] $dfx_controller_0
 
@@ -1158,8 +1160,14 @@ RID {PRESENT 0 WIDTH 0} RUSER {PRESENT 0 WIDTH 0}}}}\
   # Create instance: iomodule_0, and set properties
   set iomodule_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:iomodule:3.1 iomodule_0 ]
   set_property -dict [ list \
+   CONFIG.C_GPI1_SIZE {1} \
    CONFIG.C_GPO1_SIZE {1} \
+   CONFIG.C_GPO2_SIZE {1} \
+   CONFIG.C_GPO3_SIZE {1} \
+   CONFIG.C_USE_GPI1 {1} \
    CONFIG.C_USE_GPO1 {1} \
+   CONFIG.C_USE_GPO2 {1} \
+   CONFIG.C_USE_GPO3 {1} \
    CONFIG.C_USE_UART_RX {1} \
    CONFIG.C_USE_UART_TX {1} \
  ] $iomodule_0
@@ -2009,6 +2017,7 @@ connect_bd_intf_net -intf_net [get_bd_intf_nets dfx_controller_0_ICAP] [get_bd_i
 
   # Create port connections
   connect_bd_net -net axi_gpio_0_gpio_io_o [get_bd_pins aes_0/new_bit] [get_bd_pins axi_gpio_0/gpio_io_o] [get_bd_pins system_ila_0/probe0]
+  connect_bd_net -net dfx_controller_0_cap_req [get_bd_pins dfx_controller_0/cap_req] [get_bd_pins iomodule_0/GPI1]
   connect_bd_net -net dfx_controller_0_vsm_VS_1_rm_decouple [get_bd_pins dfx_controller_0/vsm_VS_1_rm_decouple] [get_bd_pins dfx_decoupler_0/decouple]
   connect_bd_net -net dfx_controller_0_vsm_VS_2_event_error [get_bd_pins dfx_controller_0/vsm_VS_2_event_error] [get_bd_pins system_ila_0/probe7]
   connect_bd_net -net dfx_controller_0_vsm_VS_2_rm_decouple [get_bd_pins dfx_controller_0/vsm_VS_2_rm_decouple] [get_bd_pins dfx_decoupler_1/decouple] [get_bd_pins system_ila_0/probe5]
@@ -2017,6 +2026,8 @@ connect_bd_intf_net -intf_net [get_bd_intf_nets dfx_controller_0_ICAP] [get_bd_i
   connect_bd_net -net dfx_controller_0_vsm_VS_2_sw_startup_req [get_bd_pins dfx_controller_0/vsm_VS_2_sw_startup_req] [get_bd_pins system_ila_0/probe9]
   connect_bd_net -net dfx_controller_0_vsm_VS_3_rm_decouple [get_bd_pins dfx_controller_0/vsm_VS_3_rm_decouple] [get_bd_pins dfx_decoupler_2/decouple]
   connect_bd_net -net iomodule_0_GPO1 [get_bd_ports GPO1] [get_bd_pins iomodule_0/GPO1]
+  connect_bd_net -net iomodule_0_GPO2 [get_bd_pins dfx_controller_0/cap_gnt] [get_bd_pins iomodule_0/GPO2]
+  connect_bd_net -net iomodule_0_GPO3 [get_bd_pins dfx_controller_0/cap_rel] [get_bd_pins iomodule_0/GPO3]
   connect_bd_net -net mdm_0_Debug_SYS_Rst [get_bd_pins mdm_0/Debug_SYS_Rst] [get_bd_pins rst_ps8_0_100M/mb_debug_sys_rst]
   connect_bd_net -net rst_ps8_0_100M_bus_struct_reset [get_bd_pins lmb_bram_if_cntlr_0/LMB_Rst] [get_bd_pins lmb_bram_if_cntlr_1/LMB_Rst] [get_bd_pins lmb_v10_0/SYS_Rst] [get_bd_pins lmb_v10_1/SYS_Rst] [get_bd_pins rst_ps8_0_100M/bus_struct_reset]
   connect_bd_net -net rst_ps8_0_100M_mb_reset [get_bd_pins microblaze_0/Reset] [get_bd_pins rst_ps8_0_100M/mb_reset]
@@ -2576,6 +2587,7 @@ set obj [get_runs impl_1]
 set_property -name "strategy" -value "Vivado Implementation Defaults" -objects $obj
 set_property -name "steps.write_bitstream.args.bin_file" -value "1" -objects $obj
 set_property -name "steps.write_bitstream.args.readback_file" -value "0" -objects $obj
+set_property -name "steps.write_bitstream.args.logic_location_file" -value "1" -objects $obj
 set_property -name "steps.write_bitstream.args.verbose" -value "0" -objects $obj
 
 # Create 'my_axi_const33_inst_0_impl_1' run (if not found)
@@ -4795,6 +4807,7 @@ set obj [get_runs child_0_impl_1]
 set_property -name "strategy" -value "Vivado Implementation Defaults" -objects $obj
 set_property -name "steps.write_bitstream.args.bin_file" -value "1" -objects $obj
 set_property -name "steps.write_bitstream.args.readback_file" -value "0" -objects $obj
+set_property -name "steps.write_bitstream.args.logic_location_file" -value "1" -objects $obj
 set_property -name "steps.write_bitstream.args.verbose" -value "0" -objects $obj
 
 # Create 'child_1_impl_1' run (if not found)
@@ -5016,6 +5029,7 @@ set obj [get_runs child_1_impl_1]
 set_property -name "strategy" -value "Vivado Implementation Defaults" -objects $obj
 set_property -name "steps.write_bitstream.args.bin_file" -value "1" -objects $obj
 set_property -name "steps.write_bitstream.args.readback_file" -value "0" -objects $obj
+set_property -name "steps.write_bitstream.args.logic_location_file" -value "1" -objects $obj
 set_property -name "steps.write_bitstream.args.verbose" -value "0" -objects $obj
 
 # set the current impl run
