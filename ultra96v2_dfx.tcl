@@ -195,6 +195,8 @@ set_property -name "file_type" -value "XDC" -objects $file_obj
 
 # Set 'constrs_1' fileset properties
 set obj [get_filesets constrs_1]
+set_property -name "target_constrs_file" -value "[file normalize "$origin_dir/src/constraints/IO_constraints.xdc"]" -objects $obj
+set_property -name "target_ucf" -value "[file normalize "$origin_dir/src/constraints/IO_constraints.xdc"]" -objects $obj
 
 # Create 'sim_1' fileset (if not found)
 if {[string equal [get_filesets -quiet sim_1] ""]} {
@@ -227,11 +229,11 @@ set obj [get_filesets utils_1]
 # Adding sources referenced in BDs, if not already added
 
 
-# Proc to create BD my_axi_const55
-proc cr_bd_my_axi_const55 { parentCell } {
+# Proc to create BD my_axi_const33
+proc cr_bd_my_axi_const33 { parentCell } {
 
   # CHANGE DESIGN NAME HERE
-  set design_name my_axi_const55
+  set design_name my_axi_const33
 
   common::send_gid_msg -ssname BD::TCL -id 2010 -severity "INFO" "Currently there is no design <$design_name> in project, so creating one..."
 
@@ -343,7 +345,7 @@ proc cr_bd_my_axi_const55 { parentCell } {
   # Create instance: xlconstant_0, and set properties
   set xlconstant_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_0 ]
   set_property -dict [ list \
-   CONFIG.CONST_VAL {0x55} \
+   CONFIG.CONST_VAL {0x33} \
    CONFIG.CONST_WIDTH {32} \
  ] $xlconstant_0
 
@@ -366,10 +368,10 @@ proc cr_bd_my_axi_const55 { parentCell } {
   save_bd_design
   close_bd_design $design_name 
 }
-# End of cr_bd_my_axi_const55()
-cr_bd_my_axi_const55 ""
-set_property REGISTERED_WITH_MANAGER "1" [get_files my_axi_const55.bd ] 
-set_property SYNTH_CHECKPOINT_MODE "Hierarchical" [get_files my_axi_const55.bd ] 
+# End of cr_bd_my_axi_const33()
+cr_bd_my_axi_const33 ""
+set_property REGISTERED_WITH_MANAGER "1" [get_files my_axi_const33.bd ] 
+set_property SYNTH_CHECKPOINT_MODE "Hierarchical" [get_files my_axi_const33.bd ] 
 
 
 
@@ -519,11 +521,11 @@ set_property SYNTH_CHECKPOINT_MODE "Hierarchical" [get_files my_axi_const44.bd ]
 
 
 
-# Proc to create BD my_axi_const33
-proc cr_bd_my_axi_const33 { parentCell } {
+# Proc to create BD my_axi_const55
+proc cr_bd_my_axi_const55 { parentCell } {
 
   # CHANGE DESIGN NAME HERE
-  set design_name my_axi_const33
+  set design_name my_axi_const55
 
   common::send_gid_msg -ssname BD::TCL -id 2010 -severity "INFO" "Currently there is no design <$design_name> in project, so creating one..."
 
@@ -635,7 +637,7 @@ proc cr_bd_my_axi_const33 { parentCell } {
   # Create instance: xlconstant_0, and set properties
   set xlconstant_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_0 ]
   set_property -dict [ list \
-   CONFIG.CONST_VAL {0x33} \
+   CONFIG.CONST_VAL {0x55} \
    CONFIG.CONST_WIDTH {32} \
  ] $xlconstant_0
 
@@ -658,10 +660,10 @@ proc cr_bd_my_axi_const33 { parentCell } {
   save_bd_design
   close_bd_design $design_name 
 }
-# End of cr_bd_my_axi_const33()
-cr_bd_my_axi_const33 ""
-set_property REGISTERED_WITH_MANAGER "1" [get_files my_axi_const33.bd ] 
-set_property SYNTH_CHECKPOINT_MODE "Hierarchical" [get_files my_axi_const33.bd ] 
+# End of cr_bd_my_axi_const55()
+cr_bd_my_axi_const55 ""
+set_property REGISTERED_WITH_MANAGER "1" [get_files my_axi_const55.bd ] 
+set_property SYNTH_CHECKPOINT_MODE "Hierarchical" [get_files my_axi_const55.bd ] 
 
 if { [get_files aes_core.v] == "" } {
   import_files -quiet -fileset sources_1 "$origin_dir/src/design/aes_core.v"
@@ -1229,9 +1231,10 @@ RID {PRESENT 0 WIDTH 0} RUSER {PRESENT 0 WIDTH 0}}}}\
   # Create instance: system_ila_0, and set properties
   set system_ila_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:system_ila:1.1 system_ila_0 ]
   set_property -dict [ list \
+   CONFIG.C_DATA_DEPTH {4096} \
    CONFIG.C_MON_TYPE {MIX} \
    CONFIG.C_NUM_MONITOR_SLOTS {3} \
-   CONFIG.C_NUM_OF_PROBES {10} \
+   CONFIG.C_NUM_OF_PROBES {13} \
    CONFIG.C_SLOT {2} \
    CONFIG.C_SLOT_2_INTF_TYPE {xilinx.com:interface:icap_rtl:1.0} \
  ] $system_ila_0
@@ -1990,14 +1993,13 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
   connect_bd_intf_net -intf_net Conn1 [get_bd_intf_pins lmb_bram_if_cntlr_1/SLMB] [get_bd_intf_pins lmb_v10_1/LMB_Sl_0]
   connect_bd_intf_net -intf_net S00_AXI_1 [get_bd_intf_pins axi_interconnect_0/S00_AXI] [get_bd_intf_pins dfx_controller_0/M_AXI_MEM]
   connect_bd_intf_net -intf_net aes_0_m00_axi [get_bd_intf_pins aes_0/m00_axi] [get_bd_intf_pins axi_smc/S00_AXI]
-connect_bd_intf_net -intf_net [get_bd_intf_nets aes_0_m00_axi] [get_bd_intf_pins axi_smc/S00_AXI] [get_bd_intf_pins system_ila_0/SLOT_1_AXI]
   connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins aes_0/s00_axi] [get_bd_intf_pins axi_interconnect_0/M00_AXI]
-connect_bd_intf_net -intf_net [get_bd_intf_nets axi_interconnect_0_M00_AXI] [get_bd_intf_pins axi_interconnect_0/M00_AXI] [get_bd_intf_pins system_ila_0/SLOT_0_AXI]
   connect_bd_intf_net -intf_net axi_smc_M00_AXI [get_bd_intf_pins axi_smc/M00_AXI] [get_bd_intf_pins zynq_ultra_ps_e_0/S_AXI_HPC0_FPD]
   connect_bd_intf_net -intf_net dfx_controller_0_ICAP [get_bd_intf_pins dfx_controller_0/ICAP] [get_bd_intf_pins icap_inst_0/ICAP]
 connect_bd_intf_net -intf_net [get_bd_intf_nets dfx_controller_0_ICAP] [get_bd_intf_pins dfx_controller_0/ICAP] [get_bd_intf_pins system_ila_0/SLOT_2_ICAP]
   connect_bd_intf_net -intf_net dfx_decoupler_0_rp_intf_0 [get_bd_intf_pins RP_1/S_AXI] [get_bd_intf_pins dfx_decoupler_0/rp_intf_0]
   connect_bd_intf_net -intf_net dfx_decoupler_1_rp_intf_0 [get_bd_intf_pins RP_2/S_AXI] [get_bd_intf_pins dfx_decoupler_1/rp_intf_0]
+connect_bd_intf_net -intf_net [get_bd_intf_nets dfx_decoupler_1_rp_intf_0] [get_bd_intf_pins RP_2/S_AXI] [get_bd_intf_pins system_ila_0/SLOT_0_AXI]
   connect_bd_intf_net -intf_net dfx_decoupler_2_rp_intf_0 [get_bd_intf_pins RP_3/S_AXI] [get_bd_intf_pins dfx_decoupler_2/rp_intf_0]
   connect_bd_intf_net -intf_net iomodule_0_UART [get_bd_intf_ports uart_rtl] [get_bd_intf_pins iomodule_0/UART]
   connect_bd_intf_net -intf_net lmb_bram_if_cntlr_0_BRAM_PORT [get_bd_intf_pins lmb_bram_if_cntlr_0/BRAM_PORT] [get_bd_intf_pins lmb_bram_if_cntlr_0_bram/BRAM_PORTA]
@@ -2010,6 +2012,7 @@ connect_bd_intf_net -intf_net [get_bd_intf_nets dfx_controller_0_ICAP] [get_bd_i
   connect_bd_intf_net -intf_net ps8_0_axi_periph_M00_AXI [get_bd_intf_pins dfx_controller_0/s_axi_reg] [get_bd_intf_pins ps8_0_axi_periph/M00_AXI]
   connect_bd_intf_net -intf_net ps8_0_axi_periph_M01_AXI [get_bd_intf_pins dfx_decoupler_0/s_intf_0] [get_bd_intf_pins ps8_0_axi_periph/M01_AXI]
   connect_bd_intf_net -intf_net ps8_0_axi_periph_M02_AXI [get_bd_intf_pins dfx_decoupler_1/s_intf_0] [get_bd_intf_pins ps8_0_axi_periph/M02_AXI]
+connect_bd_intf_net -intf_net [get_bd_intf_nets ps8_0_axi_periph_M02_AXI] [get_bd_intf_pins ps8_0_axi_periph/M02_AXI] [get_bd_intf_pins system_ila_0/SLOT_1_AXI]
   connect_bd_intf_net -intf_net ps8_0_axi_periph_M03_AXI [get_bd_intf_pins dfx_decoupler_2/s_intf_0] [get_bd_intf_pins ps8_0_axi_periph/M03_AXI]
   connect_bd_intf_net -intf_net ps8_0_axi_periph_M04_AXI [get_bd_intf_pins axi_gpio_0/S_AXI] [get_bd_intf_pins ps8_0_axi_periph/M04_AXI]
   connect_bd_intf_net -intf_net zynq_ultra_ps_e_0_M_AXI_HPM0_FPD [get_bd_intf_pins ps8_0_axi_periph/S00_AXI] [get_bd_intf_pins zynq_ultra_ps_e_0/M_AXI_HPM0_FPD]
@@ -2017,7 +2020,7 @@ connect_bd_intf_net -intf_net [get_bd_intf_nets dfx_controller_0_ICAP] [get_bd_i
 
   # Create port connections
   connect_bd_net -net axi_gpio_0_gpio_io_o [get_bd_pins aes_0/new_bit] [get_bd_pins axi_gpio_0/gpio_io_o] [get_bd_pins system_ila_0/probe0]
-  connect_bd_net -net dfx_controller_0_cap_req [get_bd_pins dfx_controller_0/cap_req] [get_bd_pins iomodule_0/GPI1]
+  connect_bd_net -net dfx_controller_0_cap_req [get_bd_pins dfx_controller_0/cap_req] [get_bd_pins iomodule_0/GPI1] [get_bd_pins system_ila_0/probe10]
   connect_bd_net -net dfx_controller_0_vsm_VS_1_rm_decouple [get_bd_pins dfx_controller_0/vsm_VS_1_rm_decouple] [get_bd_pins dfx_decoupler_0/decouple]
   connect_bd_net -net dfx_controller_0_vsm_VS_2_event_error [get_bd_pins dfx_controller_0/vsm_VS_2_event_error] [get_bd_pins system_ila_0/probe7]
   connect_bd_net -net dfx_controller_0_vsm_VS_2_rm_decouple [get_bd_pins dfx_controller_0/vsm_VS_2_rm_decouple] [get_bd_pins dfx_decoupler_1/decouple] [get_bd_pins system_ila_0/probe5]
@@ -2026,8 +2029,8 @@ connect_bd_intf_net -intf_net [get_bd_intf_nets dfx_controller_0_ICAP] [get_bd_i
   connect_bd_net -net dfx_controller_0_vsm_VS_2_sw_startup_req [get_bd_pins dfx_controller_0/vsm_VS_2_sw_startup_req] [get_bd_pins system_ila_0/probe9]
   connect_bd_net -net dfx_controller_0_vsm_VS_3_rm_decouple [get_bd_pins dfx_controller_0/vsm_VS_3_rm_decouple] [get_bd_pins dfx_decoupler_2/decouple]
   connect_bd_net -net iomodule_0_GPO1 [get_bd_ports GPO1] [get_bd_pins iomodule_0/GPO1]
-  connect_bd_net -net iomodule_0_GPO2 [get_bd_pins dfx_controller_0/cap_gnt] [get_bd_pins iomodule_0/GPO2]
-  connect_bd_net -net iomodule_0_GPO3 [get_bd_pins dfx_controller_0/cap_rel] [get_bd_pins iomodule_0/GPO3]
+  connect_bd_net -net iomodule_0_GPO2 [get_bd_pins dfx_controller_0/cap_gnt] [get_bd_pins iomodule_0/GPO2] [get_bd_pins system_ila_0/probe11]
+  connect_bd_net -net iomodule_0_GPO3 [get_bd_pins dfx_controller_0/cap_rel] [get_bd_pins iomodule_0/GPO3] [get_bd_pins system_ila_0/probe12]
   connect_bd_net -net mdm_0_Debug_SYS_Rst [get_bd_pins mdm_0/Debug_SYS_Rst] [get_bd_pins rst_ps8_0_100M/mb_debug_sys_rst]
   connect_bd_net -net rst_ps8_0_100M_bus_struct_reset [get_bd_pins lmb_bram_if_cntlr_0/LMB_Rst] [get_bd_pins lmb_bram_if_cntlr_1/LMB_Rst] [get_bd_pins lmb_v10_0/SYS_Rst] [get_bd_pins lmb_v10_1/SYS_Rst] [get_bd_pins rst_ps8_0_100M/bus_struct_reset]
   connect_bd_net -net rst_ps8_0_100M_mb_reset [get_bd_pins microblaze_0/Reset] [get_bd_pins rst_ps8_0_100M/mb_reset]
